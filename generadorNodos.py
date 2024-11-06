@@ -25,11 +25,3 @@ class Nodo:
         Método para imprimir el identificador del nodo
         """
         print(self.id)
-
-    def setGrado(self):
-        """
-        Modifica el grado de conexión del nodo en
-        una unidad
-        """
-        self.grado += 1
-        return self.grado

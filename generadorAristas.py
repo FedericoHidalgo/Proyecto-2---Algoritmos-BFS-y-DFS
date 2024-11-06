@@ -27,3 +27,4 @@ class Arista:
         Método para imprimir los valores de la Arista
         """     
         print(self.arista)
+
