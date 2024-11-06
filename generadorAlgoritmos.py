@@ -67,6 +67,8 @@ def BFS(modelo, s):
                     descubierto[str(v)] = True
                     #Añadir v a las capas
                     nodosSiguientes.append(v)
+                #else:
+                    
             L[contCapa + 1] = nodosSiguientes
             print("Capa actual: ", L[contCapa])
             print("Capa siguiente: ", L[contCapa + 1])
