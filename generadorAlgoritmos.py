@@ -83,14 +83,39 @@ def BFS(modelo, s):
         contCapa += 1
     return G
 
-def dfsRecursiva(self, s):
+def dfsRecursiva(modelo, s, listaExplorados):
     """
     Búsqueda en Profundidad
     Genera un Arbol a partir de un Grafo. Recorriendo todos los
-    nodos desde sde manera ordenada pero no uniforme.
+    nodos desde s de manera ordenada pero no uniforme.
+    s - nodo ancestro
     Se generta de forma recursiva.
     """
-    G = Grafo()
+    G = Grafo()                         #GenerarAristas para el arbol
+    G.agregarNodo(s)
+    s = modelo.nodos.get(int(s))             #Nodo ancentro
+    #Si el nodo ancestro no existe, termina el proceso
+    if s == None:
+        print("El nodo no pertenece al modelo")
+        return False
+    descubierto = listaExplorados             #Diccionario para indicar si el nodo ya fue descubierto
+    #Marcar s como explorado
+    descubierto[s] = True
+    #Obtenemos los descendientes de u
+    nodosIncidentes = nodosDeArista(modelo, s)
+    print("Nodos descendientes de", s,": ", nodosIncidentes)
+    #Recorremos los nodos en busqueda de los no explorados
+    for v in nodosIncidentes:
+        print("Evaluando v: ", v)
+        print("Descubierto? v: ", descubierto.get(str(v)))
+        #Si v esta marcado como no explorado
+        if descubierto.get(str(v)) == False:
+            G.agregarArista(s, v, ' -> ')
+            print("\nRecursivo....\n")
+            #Invocar recursivamente DFS
+            #print("Modelo?: ", modelo)
+            dfsRecursiva(modelo, v, listaExplorados)
+    print("Lista de nodos descubiertos: ", descubierto)
     return G
 
 def dfsIterativa(self, s):
@@ -102,3 +127,22 @@ def dfsIterativa(self, s):
     """
     return True
 
+i = 4
+nodoFuente = 6
+g = modeloMalla(i, i)
+
+descubierto = {}                    #Diccionario para indicar si el nodo ya fue descubierto
+#Obtenemos los nodos generados en el modelo
+nodoGrafo = g.nodos.values()
+#Para cada nodo v que pertenece al Grafo con v != nodoFuente
+for u in nodoGrafo:
+    descubierto[u] = False
+
+x = dfsRecursiva(g, nodoFuente, descubierto)
+
+nombreArchivo = "Malla " + str(i*i) + " nodos"
+#Generamos el archivo .gv
+g.graphViz(nombreArchivo)
+
+nombreArchivo = "Arbol " + str(i*i) + " nodos"
+x.graphViz(nombreArchivo)
