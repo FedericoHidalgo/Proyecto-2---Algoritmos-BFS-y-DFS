@@ -1,6 +1,0 @@
-digraph Arbol 16 nodos{
-6;
-6;
-2;
-6 -> 2;
-}
