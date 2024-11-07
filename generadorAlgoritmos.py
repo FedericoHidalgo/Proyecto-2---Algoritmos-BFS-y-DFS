@@ -31,13 +31,13 @@ def BFS(modelo, s):
     en todas las direcciones posibles agregando nodos una capa a la ves.
     self -> Modelo de Grafo
     """
-    G = Grafo()     #GenerarAristas para el arbol
-    L = {}      #Diccionario de capas del arbol
-    contCapa = 0    #Contador de capa
+    G = Grafo()         #GenerarAristas para el arbol
+    L = {}              #Diccionario de capas del arbol
+    contCapa = 0        #Contador de capa
     descubierto = {}    #Diccionario para indicar si el nodo ya fue descubierto
-    nodoFuente = modelo.nodos.get(s)  #Nodo Fuente
-    nodosCapa = []     #Lista donde se almacenan los nodos de cada capa
-    nodosSiguientes = []    #Lista que almacena los nodos de la siguiente capa
+    nodoFuente = modelo.nodos.get(s)    #Nodo Fuente
+    nodosCapa = []                      #Lista donde se almacenan los nodos de cada capa
+    nodosSiguientes = []                #Lista que almacena los nodos de la siguiente capa
     #Si el nodo fuente no existe, termina el proceso
     if nodoFuente == None:
         print("El nodo Fuente no pertenece al modelo")
@@ -52,29 +52,36 @@ def BFS(modelo, s):
             descubierto[i] = False
     #La capa cero es el nodo fuente
     L[0] = [nodoFuente]
-    #Mientras las capas no permanezcan vacias
     while L.get(contCapa)  != []:
+        #Variable auxiliar para almacenar valores en diccionario de capas
+        capaSiguiente = contCapa + 1
+        #Obtenemos los nodos que conforman la capa actual
         nodosCapa = L.get(contCapa)
         #Asignamos una cadena vacia a la capa siguiente
-        L[contCapa + 1] = []
-        #Para cada nodo perteneciente a la capa, se agrega al diccionario
+        L[capaSiguiente] = []
+        #Para cada nodo perteneciente a la capa, se agrega al diccionario+
         for u in nodosCapa:
-            print("Nodo: ", u)
+            #Se agrega un nodo al archivo .gv
+            G.agregarNodo(u)
+            #Obtenemos los vecinos de u en cada ciclo
             nodosIncidentes = nodosDeArista(modelo, u)
-            print("Nodos incidentes: ", nodosIncidentes)
+            #Recorremos los nodos vecinos en busqueda de nodos no explorados
             for v in nodosIncidentes:
+                #Si un nodo fue descubierto se marca como explorado y se añade a
+                #la lista de nodos de la siguiente capa
                 if descubierto.get(str(v)) == False:
                     descubierto[str(v)] = True
                     #Añadir v a las capas
-                    nodosSiguientes.append(v)
-                #else:
-                    
-            L[contCapa + 1] = nodosSiguientes
-            print("Capa actual: ", L[contCapa])
-            print("Capa siguiente: ", L[contCapa + 1])
-        #contCapa += 1
-    print("Encontrado: ", descubierto)
-    return True
+                    nodosSiguientes.append(v) 
+                    #Agregamos una arista al archivo .gv
+                    G.agregarArista(u, v, ' -> ')  
+        #Añadimos al diccionario de capas los nodos de la siguiente capa             
+        L[capaSiguiente] = nodosSiguientes
+        #Vaciamos nuestra lista de nodos, para que pueda recibir los nuevos nodos
+        nodosSiguientes = []
+        #Aumentamos un digito a nuestra busqueda de capas
+        contCapa += 1
+    return G
 
 def dfsRecursiva(self, s):
     """
@@ -102,8 +109,3 @@ def dfsIterativa(self, s):
     """
     return True
 
-i = 3
-nodoFuente = 4
-g = modeloMalla(i, i)
-x = BFS(g, nodoFuente)
-print(x)
