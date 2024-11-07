@@ -90,15 +90,8 @@ def dfsRecursiva(self, s):
     nodos desde sde manera ordenada pero no uniforme.
     Se generta de forma recursiva.
     """
-    aristasConectadas = self.aristas.values()
-    print("Aristas conectadas: ")
-    for i in aristasConectadas:
-        x = i.split(' -> ', 1)
-        if x[0] == nodoFuente or x[1] == nodoFuente:
-            G.agregarArista(x[0], x[1], ' - ')
-
-    print("Aristas: ", G.aristas.values())
-    return True
+    G = Grafo()
+    return G
 
 def dfsIterativa(self, s):
     """
