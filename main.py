@@ -6,24 +6,33 @@ from generadorModelos import *
 numNodos = [30, 100, 500]
 #Matriz para el modelo malla
 matriz = {30:[6, 5], 100: [10, 10], 500: [25, 20]}
+#Lista de Algoritomos
+algoritmo = [BFS, getDfsRecursiva, dfsIterativa]
+algNombre = ['BFS ', 'DFS Recursiva ', 'DFS Iterativa ']
 #Nodo Fuente para crear el arbol
-nodoFuente = 10
+nodoFuente = 20
 
 """
 Modelo Malla
 """
-for i in numNodos:    
+#i -> 30, 100 y 500 nodos
+for i in numNodos:   
+    #Genera el modelo de grafo  
     modelo = modeloMalla(matriz[i][0], matriz[i][1])
     nombreArchivo = "Malla " + str(i) + " nodos"
     #Generamos el archivo .gv
     modelo.graphViz(nombreArchivo)
-    """
-    BFS
-    """
-    arbol = BFS(modelo, nodoFuente)
-    nombreArchivo = "Arbol " + str(i) + " nodos"
-    #Generamos el archivo .gv
-    arbol.graphViz(nombreArchivo)
+    k = 0       #Var auxiliar para nombrar los archivos
+    for j in algoritmo:
+        #Genera el arbol de malla
+        #j -> BFS, DFS recursiva y DFS iterativa
+        arbol = j(modelo, nodoFuente)
+        nombreArchivo = "Arbol malla " + algNombre[k] + str(i) + " nodos"
+        #Generamos el archivo .gv
+        arbol.graphViz(nombreArchivo)
+        #Var auxiliar para nombrar los archivos
+        k += 1
+    
 
 
 

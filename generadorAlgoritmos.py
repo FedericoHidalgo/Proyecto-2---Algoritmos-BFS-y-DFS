@@ -43,6 +43,7 @@ def BFS(modelo, s):
     en todas las direcciones posibles agregando nodos una capa a la ves.
     self -> Modelo de Grafo
     """
+    print("Iniciando BFS")
     G = Grafo()         #GenerarAristas para el arbol
     L = {}              #Diccionario de capas del arbol
     contCapa = 0        #Contador de capa
@@ -125,11 +126,12 @@ def dfsRecursiva(modelo, s, listaExplorados, g):
             dfsRecursiva(modelo, v, listaExplorados, g)
     return g
 
-def getDfsRecursiva(modelo, s, g):
+def getDfsRecursiva(modelo, s):
     """
     Método de apoyo para generar un arbol por busqueda a lo largo
     DFS Recursiva
     """
+    print("Iniciando DFS Recursiva")
     g = Grafo()
     descubierto = {}                    #Diccionario para indicar si el nodo ya fue descubierto
     #Obtenemos los nodos generados en el modelo
@@ -144,7 +146,7 @@ def getDfsRecursiva(modelo, s, g):
     
 
 
-def dfsIterativa(modelo, s, g):
+def dfsIterativa(modelo, s):
     """
     Búsqueda en Profundidad
     Genera un Arbol a partir de un Grafo. Recorriendo todos los
@@ -154,6 +156,7 @@ def dfsIterativa(modelo, s, g):
     modelo - Grafo a evaluar
     g - nuevo grafo generado
     """
+    print("Iniciando DFS Iterativa")
     g = Grafo()
     s = modelo.nodos.get(int(s))             #Nodo fuente
     #Si el nodo fuente no existe, termina el proceso
