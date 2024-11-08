@@ -125,6 +125,25 @@ def dfsRecursiva(modelo, s, listaExplorados, g):
             dfsRecursiva(modelo, v, listaExplorados, g)
     return g
 
+def getDfsRecursiva(modelo, s, g):
+    """
+    Método de apoyo para generar un arbol por busqueda a lo largo
+    DFS Recursiva
+    """
+    g = Grafo()
+    descubierto = {}                    #Diccionario para indicar si el nodo ya fue descubierto
+    #Obtenemos los nodos generados en el modelo
+    nodoGrafo = modelo.nodos.values()
+    #Para cada nodo v que pertenece al Grafo con v != nodoFuente
+    for u in nodoGrafo:
+        descubierto[u] = False
+        #Agregamos un nodo al arbol generado
+        g.agregarNodo(u)
+    arbol = dfsRecursiva(modelo, s, descubierto, g)
+    return arbol
+    
+
+
 def dfsIterativa(modelo, s, g):
     """
     Búsqueda en Profundidad
