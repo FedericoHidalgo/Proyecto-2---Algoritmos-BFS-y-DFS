@@ -1,5 +1,6 @@
 from generadorGrafos import Grafo
 from generadorModelos import *
+import random
 
 nodosDeAristas = {}
 
@@ -23,6 +24,17 @@ def nodosDeArista(self, nodo):
             n1.append(n2[0])
     #Retornamos la lista de nodos adyacentes
     return n1
+
+def nodosVisitados(diccionario, lista):
+    """
+    Regresa True si todos los nodos ya han sido marcados como visitados,
+    regresa False si existen nodos sin visitar en la lista
+    """
+    for i in lista:
+        if diccionario.get(i) != True:
+            return False
+    return True
+        
 
 def BFS(modelo, s):
     """
@@ -113,29 +125,69 @@ def dfsRecursiva(modelo, s, listaExplorados, g):
             dfsRecursiva(modelo, v, listaExplorados, g)
     return g
 
-def dfsIterativa(self, s):
+def dfsIterativa(modelo, s, g):
     """
     Búsqueda en Profundidad
     Genera un Arbol a partir de un Grafo. Recorriendo todos los
     nodos desde s de manera ordenada pero no uniforme.
-    Se generta de forma iterativa.
+    Se genera de forma iterativa.
+    s - nodo fuente
+    modelo - Grafo a evaluar
+    g - nuevo grafo generado
     """
-    return True
+    g = Grafo()
+    s = modelo.nodos.get(int(s))             #Nodo fuente
+    #Si el nodo fuente no existe, termina el proceso
+    if s == None:
+        print("El nodo no pertenece al modelo")
+        return False
+    descubierto = {}    #Diccionario para indicar si el nodo ya fue descubierto
+    #El primer nodo descubierto es el nodo Fuente
+    descubierto[s] = True
+    g.agregarNodo(s)
+    #Obtenemos los nodos generados en el modelo
+    nodoGrafo = modelo.nodos.values()
+    #Para cada nodo v que pertenece al Grafo con v != nodoFuente
+    for i in nodoGrafo:        
+        if i != str(s):
+            descubierto[i] = False
+            g.agregarNodo(i)
+    #Iteración principal, termina cuando todos los nodos fueron recorridos
+    while(nodosVisitados(descubierto, nodoGrafo) != True):
+        #Nodos vecinos de s
+        nodosIncidentes = nodosDeArista(modelo, str(s))
+        #Se recorren los nodos vecinos en busqueda de crear una arista
+        for i in nodosIncidentes:
+            #Al encontrar el primer nodo sin conexión se crea una arista
+            if descubierto.get(i) != True:
+                g.agregarArista(s, i, ' -> ')
+                descubierto[i] = True
+                #La punta del arbol sera nuestro nuevo nodo fuente y regresa a while
+                s = i                
+                break
+            #Si ya no existen nodos vecinos disponibles
+            elif nodosVisitados(descubierto, nodosIncidentes) == True:
+                #Si aun quedan nodos del grafo sin conectar
+                if nodosVisitados(descubierto, nodoGrafo) != True:
+                    #Recorremos la lista de grafos en busqueda de nodos sin conexión
+                    #La busqueda es de atras a adelante
+                    for j in reversed(nodoGrafo):
+                        #Nodo sin conexión descubierto
+                        if descubierto[str(j)] != True:
+                            descubierto[j] = True
+                            #Localizamos sus nodos vecinos
+                            nVecino = nodosDeArista(modelo, str(j))
+                            #Lo conectamos con el vecino que forme parte de la rama principal
+                            for k in nVecino:
+                                if descubierto[k] == True:
+                                    g.agregarArista(j, k, ' -> ')
+                                    s = j
+                                    #Nueva punta del arbol
+                                #Ciclo de busqueda de vecinos
+                                break
+                            #Ciclo de busqueda de nodos sin conectar en inversa
+                            break
+                #Break del for principal
+                break
 
-G= Grafo()
-i = 4
-nodoFuente = 6
-g = modeloMalla(i, i)
-
-descubierto = {}                    #Diccionario para indicar si el nodo ya fue descubierto
-#Obtenemos los nodos generados en el modelo
-nodoGrafo = g.nodos.values()
-#Para cada nodo v que pertenece al Grafo con v != nodoFuente
-for u in nodoGrafo:
-    descubierto[u] = False
-    G.agregarNodo(u)
-
-x = dfsRecursiva(g, nodoFuente, descubierto, G)
-
-nombreArchivo = "Arbol " + str(i*i) + " nodos"
-x.graphViz(nombreArchivo)
+    return g
