@@ -10,7 +10,7 @@ matriz = {30:[6, 5], 100: [10, 10], 500: [25, 20]}
 algoritmo = [BFS, getDfsRecursiva, dfsIterativa]
 algNombre = ['BFS ', 'DFS Recursiva ', 'DFS Iterativa ']
 #Nodo Fuente para crear el arbol
-nodoFuente = 20
+nodoFuente = 25
 
 """
 Modelo Malla
@@ -32,40 +32,30 @@ for i in numNodos:
         arbol.graphViz(nombreArchivo)
         #Var auxiliar para nombrar los archivos
         k += 1
-    
-
-
 
 """
-#Generamos el modelo Malla para 30 nodos
-modelo = modeloMalla(6, 5)
-nombreArchivo = "Malla " + str(30) + " nodos"
-#Generamos el archivo .gv
-modelo.graphViz(nombreArchivo)
-
-#Generamos el modelo Malla para 100 nodos
-modelo = modeloMalla(10, 10)
-nombreArchivo = "Malla " + str(100) + " nodos"
-#Generamos el archivo .gv
-modelo.graphViz(nombreArchivo)
-
-#Generamos el modelo para 500 nodos
-modelo = modeloMalla(25, 20)
-nombreArchivo = "Malla " + str(500) + " nodos"
-#Generamos el archivo .gv
-modelo.graphViz(nombreArchivo)
-"""
-#
-"""
-#Modelo Erdos - Renyi
+Modelo Erdos Renyi
+""" 
 for i in numNodos:
     #Generamos el modelo para 30, 100 y 500 nodos
     modelo = modeloErdosRenyi(i, i-1)
     nombreArchivo = "Erdos-Renyi " + str(i) + " nodos"
     #Generamos el archivo .gv
     modelo.graphViz(nombreArchivo)
+    k = 0       #Var auxiliar para nombrar los archivos
+    for j in algoritmo:
+        #Genera el arbol de Erdos Renyi
+        #j -> BFS, DFS recursiva y DFS iterativa
+        arbol = j(modelo, nodoFuente)
+        nombreArchivo = "Arbol ErdosRenyi " + algNombre[k] + str(i) + " nodos"
+        #Generamos el archivo .gv
+        arbol.graphViz(nombreArchivo)
+        #Var auxiliar para nombrar los archivos
+        k += 1
 
-#Modelo Gilbert
+"""
+Modelo Gilbert
+"""
 p = 0.1
 #Damos una probabilidad de 0.1 para la conexión de nodos
 for i in numNodos:
@@ -74,17 +64,41 @@ for i in numNodos:
     nombreArchivo = "Gilbert "  + str(i) + " nodos"
     #Generamos el archivo .gv
     modelo.graphViz(nombreArchivo)
+    k = 0       #Var auxiliar para nombrar los archivos
+    for j in algoritmo:
+        #Genera el arbol de malla
+        #j -> BFS, DFS recursiva y DFS iterativa
+        arbol = j(modelo, nodoFuente)
+        nombreArchivo = "Arbol Gilbert " + algNombre[k] + str(i) + " nodos"
+        #Generamos el archivo .gv
+        arbol.graphViz(nombreArchivo)
+        #Var auxiliar para nombrar los archivos
+        k += 1
 
-#Modelo Geografico Simple
-r = 0.1 #Distancia máxima entre nodos
+"""
+Modelo Geografico Simple
+"""
+r = 0.25 #Distancia máxima entre nodos
 for i in numNodos:
     #Generamos el modelo para 30, 100 y 500 nodos
     modelo = modeloGeograficoSimple(i, r)
     nombreArchivo = "GeograficoSimple " + str(i) + " nodos"
     #Generamos el archivo .gv
     modelo.graphViz(nombreArchivo)
+    k = 0       #Var auxiliar para nombrar los archivos
+    for j in algoritmo:
+        #Genera el arbol de malla
+        #j -> BFS, DFS recursiva y DFS iterativa
+        arbol = j(modelo, nodoFuente)
+        nombreArchivo = "Arbol Geografico " + algNombre[k] + str(i) + " nodos"
+        #Generamos el archivo .gv
+        arbol.graphViz(nombreArchivo)
+        #Var auxiliar para nombrar los archivos
+        k += 1
 
-#Modelo Barabasi-Albert
+"""
+Modelo Barabasi-Albert
+"""
 d = 8 #Número máximo de conexiones por vertice
 for i in numNodos:
     #Generamos el modelo para 30, 100 y 500 nodos
@@ -92,73 +106,33 @@ for i in numNodos:
     nombreArchivo = "Barabasi-Albert " + str(i) + " nodos"
     #Generamos el archivo .gv
     modelo.graphViz(nombreArchivo)
+    k = 0       #Var auxiliar para nombrar los archivos
+    for j in algoritmo:
+        #Genera el arbol de malla
+        #j -> BFS, DFS recursiva y DFS iterativa
+        arbol = j(modelo, nodoFuente)
+        nombreArchivo = "Arbol Barabasi " + algNombre[k] + str(i) + " nodos"
+        #Generamos el archivo .gv
+        arbol.graphViz(nombreArchivo)
+        #Var auxiliar para nombrar los archivos
+        k += 1
 
+"""
+Módelo Dorogovtsev Mendes
+"""
 for i in numNodos:
     #Generamos el modelo para 30, 100 y 500 nodos
     modelo = modeloDorogovtsevMendes(i)
     nombreArchivo = "Dorogovtsev-Mendes " + str(i) + " nodos"
     #Generamos el archivo .gv
     modelo.graphViz(nombreArchivo)
-"""
-#BFS
-"""
-i = 4
-nodoFuente = 7
-g = modeloMalla(i, i)
-nombreArchivo = "Malla " + str(i*i) + " nodos"
-#Generamos el archivo .gv
-g.graphViz(nombreArchivo)
-
-x = BFS(g, nodoFuente)
-nombreArchivo = "Arbol " + str(i*i) + " nodos"
-x.graphViz(nombreArchivo)
-"""
-#DFS RECURSIVO
-"""
-#Creamos el objeto del nuevo grafo DFS
-G= Grafo()
-#Crewamos el modelo de donde se obtendra el arbol
-i = 4
-nodoFuente = 6
-g = modeloMalla(i, i)
-
-descubierto = {}                    #Diccionario para indicar si el nodo ya fue descubierto
-#Obtenemos los nodos generados en el modelo
-nodoGrafo = g.nodos.values()
-#Para cada nodo v que pertenece al Grafo con v != nodoFuente
-for u in nodoGrafo:
-    descubierto[u] = False
-    #Agregamos un nodo al arbol generado
-    G.agregarNodo(u)
-
-x = dfsRecursiva(g, nodoFuente, descubierto, G)
-
-nombreArchivo = "Arbol " + str(i*i) + " nodos"
-x.graphViz(nombreArchivo)
-#####################
-
-
-G= Grafo()
-i = 5
-j = 6
-nodoFuente = 16
-g = modeloMalla(i, j)
-
-y = dfsIterativa(g, nodoFuente, G)
-
-descubierto = {}                    #Diccionario para indicar si el nodo ya fue descubierto
-#Obtenemos los nodos generados en el modelo
-nodoGrafo = g.nodos.values()
-#Para cada nodo v que pertenece al Grafo con v != nodoFuente
-for u in nodoGrafo:
-    descubierto[u] = False
-    #Agregamos un nodo al arbol generado
-    G.agregarNodo(u)
-
-x = dfsRecursiva(g, nodoFuente, descubierto, G)
-
-nombreArchivo = "Arbol iterativo " + str(i*i) + " nodos"
-nombreArchivo2 = "Arbol recursivo" + str(i*i) + " nodos"
-x.graphViz(nombreArchivo)
-y.graphViz(nombreArchivo2)
-"""
+    k = 0       #Var auxiliar para nombrar los archivos
+    for j in algoritmo:
+        #Genera el arbol de malla
+        #j -> BFS, DFS recursiva y DFS iterativa
+        arbol = j(modelo, nodoFuente)
+        nombreArchivo = "Arbol Dorogovtsev " + algNombre[k] + str(i) + " nodos"
+        #Generamos el archivo .gv
+        arbol.graphViz(nombreArchivo)
+        #Var auxiliar para nombrar los archivos
+        k += 1
